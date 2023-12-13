@@ -1,6 +1,7 @@
 import argparse
 from PIL import Image, ImageDraw, ImageFont
 import textwrap
+import re
 
 def leer_frases_desde_archivo(archivo):
     with open(archivo, 'r', encoding='utf-8') as file:
@@ -20,6 +21,7 @@ def crear_imagen(platilla_path, frases):
 
     # Configurar la fuente y tamaño de texto
     fuente_path = "Roboto-Bold.ttf"
+    fuente_path_italic = "Roboto-BoldItalic.ttf"
 
     # Crear un objeto ImageDraw
     draw = ImageDraw.Draw(plantilla)
@@ -41,16 +43,22 @@ def crear_imagen(platilla_path, frases):
             # Calcular la posición vertical inicial para centrar el texto
             espacio_restante = alto_celda - len(lineas) * line_height
             y_inicio = i * alto_celda + espacio_restante // 2
-            
+
             font_size = 35
-            
+
             while espacio_restante < 240:
                 font_size -= 10
                 line_height -= 10
                 espacio_restante = alto_celda - len(lineas) * line_height
                 y_inicio = i * alto_celda + espacio_restante // 2
-            
-            fuente = ImageFont.truetype(fuente_path, font_size)  
+                
+            # Verificar si la frase está entre comillas y usar la fuente cursiva en ese caso
+            if re.search(r'"([^"]*)"', frase):
+                fuente = ImageFont.truetype(fuente_path_italic, font_size)
+            else:
+                fuente = ImageFont.truetype(fuente_path, font_size)
+                
+                  
 
             # Escribir cada línea en la imagen con margen a la izquierda y separación vertical
             for k, linea in enumerate(lineas):
