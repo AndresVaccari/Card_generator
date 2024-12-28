@@ -10,4 +10,4 @@ The Card Generator app is a Python application that takes a template image, a li
 
 Modify the phrases.txt file with your own phrases and run the following in the terminal
 
-    py .\main.py .\template_name.png .\phrases.txt
+    py .\main.py .\template_name.png .\phrases.txt text_color(optional - black or white)
