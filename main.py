@@ -12,7 +12,7 @@ def crear_matriz(frases):
     matriz = [frases[i:i+10] for i in range(0, len(frases), 10)]
     return matriz
 
-def crear_imagen(platilla_path, frases):
+def crear_imagen(platilla_path, frases, text_color):
     # Cargar la imagen de la plantilla
     plantilla = Image.open(platilla_path)
 
@@ -58,14 +58,12 @@ def crear_imagen(platilla_path, frases):
             else:
                 fuente = ImageFont.truetype(fuente_path, font_size)
                 
-                  
-
             # Escribir cada línea en la imagen con margen a la izquierda y separación vertical
             for k, linea in enumerate(lineas):
                 x = j * ancho_celda + margen_izquierdo
                 y = y_inicio + k * line_height
 
-                draw.text((x, y), linea, font=fuente, fill="black")
+                draw.text((x, y), linea, font=fuente, fill=text_color)
 
     # Guardar la imagen resultante
     plantilla.save("imagen_resultante.png")
@@ -75,17 +73,23 @@ def main():
     parser = argparse.ArgumentParser(description='Crear imagen con frases en una plantilla.')
     parser.add_argument('plantilla', type=str, help='Ruta de la imagen de la plantilla')
     parser.add_argument('archivo_frases', type=str, help='Ruta del archivo de texto con las frases')
+    parser.add_argument('text_color', type=str, help='Color del texto')
 
     # Obtener las rutas desde los argumentos de línea de comandos
     args = parser.parse_args()
     plantilla_path = args.plantilla
     archivo_frases = args.archivo_frases
+    text_color = args.text_color if args.text_color else "black"
+    
+    if text_color not in ["black", "white"]:
+        print("El color del texto debe ser 'black' o 'white'.")
+        return
 
     # Leer las frases desde el archivo
     frases = leer_frases_desde_archivo(archivo_frases)
 
     # Crear la imagen resultante
-    crear_imagen(plantilla_path, frases)
+    crear_imagen(plantilla_path, frases, text_color)
 
 if __name__ == "__main__":
     main()
